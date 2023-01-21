@@ -1,4 +1,4 @@
-package HW_1;
+package HomeWork;
 // Вычислить сумму чисел от 1 до n, вычислить n! произведение чисел от 1 до n
 
 public class task1 {
