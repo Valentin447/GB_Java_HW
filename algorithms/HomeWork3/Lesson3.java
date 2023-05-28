@@ -32,6 +32,13 @@ public class Lesson3 {
         System.out.println(reversed); // [3 -> 2 -> 1]
         System.out.println(myLinkedList); // [1 -> 2 -> 3]
 
+        System.out.println(myLinkedList.size());
+
+        System.out.println(myLinkedList.contains(2));
+        System.out.println(myLinkedList.contains(4));
+
+        System.out.println(myLinkedList.popLast());
+        System.out.println(myLinkedList);
     }
 
     private static void annoDemo() {
