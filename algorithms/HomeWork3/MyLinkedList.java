@@ -1,9 +1,12 @@
 package ru.gb.lesson3;
 
+import java.sql.Array;
+
 @MyAnno
 public class MyLinkedList {
 
     private Node head;
+    private int size = 0;
 
     /**
      * Реализоват в классе MyLinkedList следующие методы
@@ -36,6 +39,7 @@ public class MyLinkedList {
         } else {
             last.next = new Node(value);
         }
+        size++;
     }
 
     public int getFirst() {
@@ -77,6 +81,7 @@ public class MyLinkedList {
         if (index == 0) {
             int pop = head.value;
             head = head.next;
+            size--;
             return pop;
         }
 
@@ -86,6 +91,7 @@ public class MyLinkedList {
             if (indexCursor == index) {
                 int pop = cursor.next.value;
                 cursor.next = cursor.next.next;
+                size--;
                 return pop;
             }
 
@@ -97,8 +103,20 @@ public class MyLinkedList {
     }
 
     public MyLinkedList reversed() {
-        // TODO: 25.05.2023 Реализовать пункт 5
-        throw new UnsupportedOperationException();
+        if (head == null) {
+            throw new IllegalStateException("Список пустой");
+        }
+        MyLinkedList listReversed = new MyLinkedList();
+        Node cursor = head;
+        int[] values = new int[size];
+        for(int i = 0; i < values.length; i++){
+            values[i] = cursor.value;
+            cursor = cursor.next;
+        }
+        for(int i = values.length - 1; i >= 0; i--){
+            listReversed.add(values[i]);
+        }
+        return listReversed;
     }
 
     private Node findLast() {
@@ -130,5 +148,46 @@ public class MyLinkedList {
 
         result.append("]");
         return result.toString();
+    }
+    public int size(){
+        return size;
+    }
+
+    public boolean contains(int value) {
+        Node cursor = head;
+        if (head == null) {
+            return false;
+        }
+        do {
+            if(cursor.value == value){
+                return true;
+            } else if (cursor.next == null){
+                return false;
+            }
+            cursor = cursor.next;
+        } while (true);
+    }
+
+    public int popLast(){
+        if (head == null) {
+            throw new IllegalStateException("Список пустой");
+        }
+        int removedValue;
+        Node cursor = head;
+        if(head.next == null){
+            removedValue = head.value;
+            head = null;
+            size--;
+            return removedValue;
+        }
+        do {
+            if (cursor.next.next == null) {
+                removedValue = cursor.next.value;
+                cursor.next = null;
+                size--;
+                return removedValue;
+            }
+            cursor = cursor.next;
+        } while (true);
     }
 }
