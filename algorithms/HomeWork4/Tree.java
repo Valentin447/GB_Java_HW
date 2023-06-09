@@ -2,7 +2,7 @@ package ru.gb.lesson4;
 
 import java.util.*;
 
-public class Tree/* <T extends Comparable<T>> */ {
+public class Tree <T extends Comparable<T>> {
 
     // Нужно реализовать структуру, которая умеет делать следующее:
     // 1. Вставка значения
@@ -17,19 +17,19 @@ public class Tree/* <T extends Comparable<T>> */ {
     //  Заменить все проверки > < == на вызовы compareTo
 
 
-    private class Node {
-        int value;
+    private class Node<T> {
+        T value;
         Node left;
         Node right;
 
-        Node(int value) {
+        Node(T value) {
             this.value = value;
         }
     }
 
     private Node root;
 
-    public boolean add(int value) {
+    public boolean add(T value) {
         if (root == null) {
             root = new Node(value);
             return true;
@@ -38,13 +38,13 @@ public class Tree/* <T extends Comparable<T>> */ {
         return addNode(root, value);
     }
 
-    private boolean addNode(Node current, int value) {
+    private boolean addNode(Node current, T value) {
         // value < current.value ~ value.compareTo(current.value) == 0
-        if (value == current.value) {
+        if (value.compareTo((T) current.value) == 0) {
             return false;
 
         // value < current.value ~ value.compareTo(current.value) < 0
-        } else if (value < current.value) {
+        } else if (value.compareTo((T) current.value) < 0) {
             // Вставялем в левое поддерево
             if (current.left == null) {
                 current.left = new Node(value);
@@ -64,30 +64,30 @@ public class Tree/* <T extends Comparable<T>> */ {
         }
     }
 
-    public boolean contains(int value) {
+    public boolean contains(T value) {
         return findNode(root, value) != null;
     }
 
-    private Node findNode(Node current, int value) {
+    private Node findNode(Node current, T value) {
         if (current == null) {
             return null;
         }
 
         // найди узел в дереве current, значение которого равно value
-        if (value == current.value) {
+        if (value.compareTo((T) current.value) == 0) {
             return current;
-        } else if (value < current.value) {
+        } else if (value.compareTo((T) current.value) < 0) {
             return findNode(current.left, value);
         } else { // value > current.value
             return findNode(current.right, value);
         }
     }
 
-    public void remove(int value) {
-        root = removeNode(root, value);
+    public void remove(T value) {
+        root = removeNode(root,(T) value);
     }
 
-    private Node removeNode(Node current, int value) {
+    private Node removeNode(Node current, T value) {
         if (current == null) {
             return null;
         }
@@ -96,11 +96,11 @@ public class Tree/* <T extends Comparable<T>> */ {
         // 6.right = 7
 
         // value = 8, current = 8
-        if (value < current.value) {
+        if (value.compareTo((T) current.value) < 0) {
             // нужно удалить в левом поддереве
             current.left = removeNode(current.left, value);
             return current;
-        } else if (value > current.value) {
+        } else if (value.compareTo((T) current.value) > 0) {
             // нужно удалить в правом поддереве
             current.right = removeNode(current.right, value);
             return current;
@@ -124,17 +124,17 @@ public class Tree/* <T extends Comparable<T>> */ {
         // 3. Есть оба дочерних узла
         // Нужно найти минимальный элемент справа
         Node smallestNodeOnTheRight = findFirst(current.right);
-        int smallestValueOnTheRight = smallestNodeOnTheRight.value;
+        T smallestValueOnTheRight = (T) smallestNodeOnTheRight.value;
         current.value = smallestValueOnTheRight;
         current.right = removeNode(current.right, smallestValueOnTheRight);
         return current;
     }
 
-    public int findFirst() {
+    public T findFirst() {
         if (root == null) {
             throw new NoSuchElementException();
         }
-        return findFirst(root).value;
+        return (T)findFirst(root).value;
     }
 
     private Node findFirst(Node current) {
@@ -144,39 +144,39 @@ public class Tree/* <T extends Comparable<T>> */ {
         return findFirst(current.left);
     }
 
-    public List<Integer> dfs() {
+    public List<T> dfs() {
         if (root == null) {
             return List.of();
         }
 
-        List<Integer> list = new ArrayList<>();
+        List<T> list = new ArrayList<>();
         dfs(root, list);
         return list;
     }
 
-    private void dfs(Node current, List<Integer> result) {
+    private void dfs(Node current, List<T> result) {
         // In-order
         if (current.left != null) {
             dfs(current.left, result);
         }
-        result.add(current.value);
+        result.add((T)current.value);
         if (current.right != null) {
             dfs(current.right, result);
         }
     }
 
-    public List<Integer> bfs() {
+    public List<T> bfs() {
         if (root == null) {
             return List.of();
         }
 
-        List<Integer> result = new ArrayList<>();
+        List<T> result = new ArrayList<>();
         Queue<Node> queue = new LinkedList<>();
         queue.add(root);
 
         while (!queue.isEmpty()) {
             Node next = queue.poll();
-            result.add(next.value);
+            result.add((T)next.value);
 
             if (next.left != null) {
                 queue.add(next.left);
